@@ -8,10 +8,15 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ('id', 'email', 'password')
 
+    def validate_email(self, value):
+        if User.objects.filter(email=value).exists():
+            raise serializers.ValidationError("User with this email already exists")
+        return value
+
     def create(self, validated_data):
         user = User.objects.create_user(**validated_data)
         return user
-    
+
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
@@ -36,14 +41,19 @@ class ProductSerializer(serializers.Serializer):
         instance.category_id = validated_data.get('category', instance.category_id)
         instance.save()
         return instance
+    
+class OrderItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrderItem
+        fields = '__all__'
 
 class OrderSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
     created_at = serializers.DateTimeField(read_only=True)
+    items = OrderItemSerializer(many=True, read_only=True)
 
     def create(self, validated_data):
         request = self.context.get('request')
         user = request.user
-
         return Order.objects.create(user=user, **validated_data)
     

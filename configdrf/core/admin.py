@@ -4,7 +4,7 @@ from .models import User, Order, OrderItem, Category, Product
 # Register your models here.
 
 class UserAdmin(admin.ModelAdmin):
-    list_display = ("email")
+    list_display = ("email", "password")
 class OrderAdmin(admin.ModelAdmin):
     list_display = ("user", "created_at")
 class OrderItemAdmin(admin.ModelAdmin):
