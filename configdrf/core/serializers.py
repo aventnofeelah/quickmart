@@ -6,7 +6,12 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'email', 'password', 'first_name', 'last_name')
+        fields = ('id', 'email', 'password', 'first_name', 'last_name', 'role', 'shop_name', 'shop_address', 'latitude', 'longitude')
+
+    def validate_role(self, value):
+        # Aggressively strip any quotes or whitespace
+        clean_value = value.replace('"', '').replace("'", "").strip().lower()
+        return clean_value
 
     def validate_email(self, value):
         if User.objects.filter(email=value).exists():
@@ -14,7 +19,6 @@ class UserSerializer(serializers.ModelSerializer):
         return value
 
     def create(self, validated_data):
-        validated_data['username'] = validated_data['email']
         user = User.objects.create_user(**validated_data)
         return user
 
@@ -57,4 +61,3 @@ class OrderSerializer(serializers.Serializer):
         request = self.context.get('request')
         user = request.user
         return Order.objects.create(user=user, **validated_data)
-    

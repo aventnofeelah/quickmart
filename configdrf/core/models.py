@@ -1,6 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
-from django.contrib.auth.models import BaseUserManager
+from django.contrib.auth.models import AbstractUser, BaseUserManager
 
 # Create your models here.
 
@@ -8,29 +7,38 @@ class UserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
         if not email:
             raise ValueError("Email is required")
-
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
-        user.save()
+        user.save(using=self._db)
         return user
 
     def create_superuser(self, email, password=None, **extra_fields):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
-
         return self.create_user(email, password, **extra_fields)
-    
+
 class User(AbstractUser):
-    email = models.EmailField(null=False, blank=False, unique=True, verbose_name="Email")
+    ROLE_CHOICES = (
+        ('buyer', 'Buyer'),
+        ('seller', 'Seller'),
+    )
+    
+    username = None # We use email as login
+    email = models.EmailField(unique=True, verbose_name="Email")
+    role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='buyer')
+    shop_name = models.CharField(max_length=255, null=True, blank=True)
+    shop_address = models.CharField(max_length=500, null=True, blank=True)
+    latitude = models.FloatField(null=True, blank=True)
+    longitude = models.FloatField(null=True, blank=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
     objects = UserManager()
-    
+
     def __str__(self):
-        return f"{self.email}"
+        return self.email
     
     class Meta:
         verbose_name = "User"
@@ -81,5 +89,3 @@ class OrderItem(models.Model):
     class Meta:
         verbose_name = "Order item"
         verbose_name_plural = "Order items"
-    
-
