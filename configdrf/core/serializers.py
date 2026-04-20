@@ -33,7 +33,7 @@ class ProductSerializer(serializers.Serializer):
     price = serializers.IntegerField()
     description = serializers.CharField(max_length=500)
     count = serializers.IntegerField()
-    category = serializers.IntegerField()
+    category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all())
 
     def create(self, validated_data):
         return Product.objects.create(**validated_data)
@@ -50,14 +50,20 @@ class ProductSerializer(serializers.Serializer):
 class OrderItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrderItem
-        fields = '__all__'
+        fields = ['product']
 
 class OrderSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
     created_at = serializers.DateTimeField(read_only=True)
-    items = OrderItemSerializer(many=True, read_only=True)
+    items = OrderItemSerializer(many=True)
 
     def create(self, validated_data):
+        items_data = validated_data.pop('items')
         request = self.context.get('request')
         user = request.user
-        return Order.objects.create(user=user, **validated_data)
+        order = Order.objects.create(user=user, **validated_data)
+
+        for item_data in items_data:
+            OrderItem.objects.create(order=order, **item_data)
+            
+        return order
