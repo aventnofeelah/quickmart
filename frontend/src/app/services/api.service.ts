@@ -18,6 +18,13 @@ export class ApiService {
     return this.http.get(`${this.baseUrl}/products/`, { params });
   }
 
+  createProduct(product: any): Observable<any> {
+    const token = localStorage.getItem('access_token');
+    return this.http.post(`${this.baseUrl}/products/`, product, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+  }
+
   getProduct(id: number): Observable<any> {
     return this.http.get(`${this.baseUrl}/products/${id}/`);
   }

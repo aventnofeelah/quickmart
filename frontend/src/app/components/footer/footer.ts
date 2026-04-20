@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-footer',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, RouterLink],
   template: `
     <footer class="footer">
       <div class="container footer-grid">
@@ -30,15 +29,6 @@ import { RouterLink } from '@angular/router';
             </li>
           </ul>
         </div>
-
-        <div class="footer-contact">
-          <h4>Newsletter</h4>
-          <p>Subscribe to our newsletter and get exclusive discounts!</p>
-          <form class="subscribe-box" (ngSubmit)="onSubscribe()">
-            <input type="email" name="subEmail" [(ngModel)]="subEmail" placeholder="Your Email" required>
-            <button type="submit" class="btn btn-primary">OK</button>
-          </form>
-        </div>
       </div>
       <div class="footer-bottom">
         <div class="container">
@@ -49,7 +39,7 @@ import { RouterLink } from '@angular/router';
   `,
   styles: [`
     .footer { background: var(--secondary); color: white; padding-top: 80px; }
-    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 2fr; gap: 50px; margin-bottom: 60px; }
+    .footer-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 50px; margin-bottom: 60px; }
     .footer-logo { height: 50px; width: auto; margin-bottom: 25px; object-fit: contain; }
     .social-links { display: flex; gap: 15px; }
     .social-links a { width: 40px; height: 40px; background: rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; border-radius: 50%; color: white; transition: var(--transition); }
@@ -64,8 +54,6 @@ import { RouterLink } from '@angular/router';
   `]
 })
 export class FooterComponent {
-  subEmail: string = '';
-  
   footerLinks = [
     { 
       title: 'Customers', 
@@ -86,11 +74,4 @@ export class FooterComponent {
       ] 
     }
   ];
-
-  onSubscribe() {
-    if (this.subEmail) {
-      alert('Thank you for subscribing!');
-      this.subEmail = '';
-    }
-  }
 }

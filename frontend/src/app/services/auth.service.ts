@@ -28,6 +28,20 @@ export class AuthService {
   logout() {
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
+    localStorage.removeItem('user');
+  }
+
+  getUserProfile(): Observable<any> {
+    return this.http.get(`${this.baseUrl}/me/`, {
+      headers: { Authorization: `Bearer ${this.getToken()}` }
+    }).pipe(
+      tap(user => localStorage.setItem('user', JSON.stringify(user)))
+    );
+  }
+
+  getCurrentUser() {
+    const user = localStorage.getItem('user');
+    return user ? JSON.parse(user) : null;
   }
 
   isLoggedIn(): boolean {

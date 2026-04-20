@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
+import { CartService } from '../../services/cart.service';
 
 @Component({
   selector: 'app-header',
@@ -30,6 +31,7 @@ import { AuthService } from '../../services/auth.service';
             <li><a routerLink="/products" routerLinkActive="active">Catalog</a></li>
             <li><a routerLink="/categories" routerLinkActive="active">Categories</a></li>
             <li><a routerLink="/about" routerLinkActive="active">About</a></li>
+            <li *ngIf="isSeller()"><a routerLink="/sell" routerLinkActive="active" class="sell-nav-item">Sell Product</a></li>
           </ul>
         </nav>
 
@@ -43,7 +45,7 @@ import { AuthService } from '../../services/auth.service';
           <div class="user-actions">
             <a routerLink="/cart" class="tool-icon cart">
               <i class="fas fa-shopping-bag"></i>
-              <span class="count">0</span>
+              <span class="count">{{cartCount}}</span>
             </a>
             <div class="auth-box">
               <ng-container *ngIf="!isLoggedIn()">
@@ -112,13 +114,35 @@ import { AuthService } from '../../services/auth.service';
 
     .auth-box { display: flex; gap: 12px; align-items: center; }
     .reg-link { background: #222; color: white !important; padding: 6px 16px; border-radius: 8px; font-weight: 700; text-decoration: none; font-size: 0.85rem; }
+    .sell-nav-item { color: var(--primary) !important; border: 1px solid var(--primary); padding: 5px 12px; border-radius: 6px; }
   `]
 })
 export class HeaderComponent implements OnInit {
   searchQuery: string = '';
-  constructor(private authService: AuthService) {}
-  ngOnInit() {}
+  cartCount: number = 0;
+  user: any = null;
+  private cdr = inject(ChangeDetectorRef);
+
+  constructor(private authService: AuthService, private cart: CartService) {}
+
+  ngOnInit() {
+    this.cart.cartCount$.subscribe(count => {
+      this.cartCount = count;
+      this.cdr.detectChanges();
+    });
+    if (this.isLoggedIn()) {
+      this.authService.getUserProfile().subscribe(user => {
+        this.user = user;
+        this.cdr.detectChanges();
+      });
+    }
+  }
+
   isLoggedIn() { return this.authService.isLoggedIn(); }
+  isSeller() { 
+    const u = this.user || this.authService.getCurrentUser();
+    return u?.role === 'seller' || u?.role === '"seller"'; 
+  }
   onSearch() { console.log('Searching for:', this.searchQuery); }
   logout() { this.authService.logout(); window.location.reload(); }
 }

@@ -33,9 +33,12 @@ class ProductSerializer(serializers.Serializer):
     price = serializers.IntegerField()
     description = serializers.CharField(max_length=500)
     count = serializers.IntegerField()
+    image_url = serializers.URLField(required=False, allow_null=True, allow_blank=True)
     category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all())
+    owner = serializers.PrimaryKeyRelatedField(read_only=True)
 
     def create(self, validated_data):
+        # The view should inject the owner
         return Product.objects.create(**validated_data)
 
     def update(self, instance, validated_data):
@@ -43,6 +46,7 @@ class ProductSerializer(serializers.Serializer):
         instance.price = validated_data.get('price', instance.price)
         instance.description = validated_data.get('description', instance.description)
         instance.count = validated_data.get('count', instance.count)
+        instance.image_url = validated_data.get('image_url', instance.image_url)
         instance.category_id = validated_data.get('category', instance.category_id)
         instance.save()
         return instance

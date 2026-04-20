@@ -70,6 +70,9 @@ class ProductsList(generics.ListCreateAPIView):
     ordering_fields = ['price', 'name']
 
     permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
     
 class ProductDetail(APIView):
     def get_object(self, id):
@@ -89,6 +92,12 @@ class ProductDetail(APIView):
         product = self.get_object(id)
         product.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+class CurrentUser(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    def get(self, request):
+        serializer = UserSerializer(request.user)
+        return Response(serializer.data)
     
 class UserList(APIView):
     def get(self, request, format=None):

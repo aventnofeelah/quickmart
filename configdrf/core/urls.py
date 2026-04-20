@@ -9,6 +9,7 @@ from .views import (
     UserRegister,
     UserOrders,
     OrderDetail,
+    CurrentUser,
 )
 
 urlpatterns = [
@@ -23,5 +24,6 @@ urlpatterns = [
     path('registration/', UserRegister.as_view()),
     path('orders/', UserOrders.as_view()),
     path('orders/<int:id>/', OrderDetail.as_view()),
+    path('me/', CurrentUser.as_view()),
 
 ]

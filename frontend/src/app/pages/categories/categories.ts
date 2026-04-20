@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { ApiService } from '../../services/api.service';
@@ -73,17 +73,24 @@ import { ApiService } from '../../services/api.service';
 })
 export class CategoriesComponent implements OnInit {
   categories: any[] = [];
+  private cdr = inject(ChangeDetectorRef);
 
   constructor(private api: ApiService) {}
 
   ngOnInit() {
-    this.api.getCategories().subscribe(res => {
-      this.categories = res;
-      // Add some icons if missing
-      const icons = ['fas fa-laptop', 'fas fa-tshirt', 'fas fa-home', 'fas fa-headphones', 'fas fa-pump-soap'];
-      this.categories.forEach((c, i) => {
-        if (!c.icon) c.icon = icons[i % icons.length];
-      });
+    this.api.getCategories().subscribe({
+      next: (res: any) => {
+        this.categories = res && res.results ? res.results : (Array.isArray(res) ? res : []);
+        
+        // Add some icons if missing
+        const icons = ['fas fa-laptop', 'fas fa-tshirt', 'fas fa-home', 'fas fa-headphones', 'fas fa-pump-soap'];
+        this.categories.forEach((c, i) => {
+          if (!c.icon) c.icon = icons[i % icons.length];
+        });
+        
+        this.cdr.detectChanges();
+      },
+      error: (err) => console.error('Error loading categories:', err)
     });
   }
 }

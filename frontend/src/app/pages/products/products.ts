@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ApiService } from '../../services/api.service';
+import { CartService } from '../../services/cart.service';
 
 @Component({
   selector: 'app-products',
@@ -26,14 +27,15 @@ import { ApiService } from '../../services/api.service';
       <div class="grid grid-cols-4" *ngIf="!loading; else loadingTemplate">
         <div class="product-card" *ngFor="let p of products">
           <div class="p-img">
-             <div class="no-img"><i class="fas fa-image"></i></div>
+             <img [src]="p.image_url" *ngIf="p.image_url" alt="{{p.name}}" class="product-image">
+             <div class="no-img" *ngIf="!p.image_url"><i class="fas fa-image"></i></div>
           </div>
           <div class="p-info">
              <h3>{{p.name}}</h3>
-             <p>{{p.description | slice:0:60}}...</p>
+             <p>{{ (p.description || '') | slice:0:60 }}...</p>
              <div class="p-bottom">
                 <span class="p-price">{{p.price | number}} KZT</span>
-                <button class="btn btn-primary btn-sm"><i class="fas fa-cart-plus"></i></button>
+                <button class="btn btn-primary btn-sm" (click)="addToCart(p)"><i class="fas fa-cart-plus"></i></button>
              </div>
           </div>
         </div>
@@ -86,6 +88,11 @@ import { ApiService } from '../../services/api.service';
       align-items: center;
       justify-content: center;
     }
+    .product-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
     .no-img {
       font-size: 3rem;
       color: #ccc;
@@ -128,21 +135,32 @@ export class ProductsComponent implements OnInit {
   categories: any[] = [];
   loading = true;
 
-  constructor(private api: ApiService) {}
+  constructor(private api: ApiService, private cart: CartService) {}
+  private cdr = inject(ChangeDetectorRef);
 
   ngOnInit() {
     this.loadProducts();
-    this.api.getCategories().subscribe(res => this.categories = res);
+    this.api.getCategories().subscribe({
+      next: (res) => {
+        this.categories = res && res.results ? res.results : (Array.isArray(res) ? res : []);
+        this.cdr.detectChanges();
+      },
+      error: (err) => {}
+    });
   }
 
   loadProducts(params?: any) {
     this.loading = true;
     this.api.getProducts(params).subscribe({
       next: (res) => {
-        this.products = res.results || res; // handle pagination
+        this.products = res && res.results ? res.results : (Array.isArray(res) ? res : []);
         this.loading = false;
+        this.cdr.detectChanges();
       },
-      error: () => this.loading = false
+      error: (err) => {
+        this.loading = false;
+        this.cdr.detectChanges();
+      }
     });
   }
 
@@ -154,5 +172,10 @@ export class ProductsComponent implements OnInit {
   onSortChange(event: any) {
     const ordering = event.target.value;
     this.loadProducts({ ordering });
+  }
+
+  addToCart(product: any) {
+    this.cart.addToCart(product);
+    alert(`${product.name} added to cart!`);
   }
 }

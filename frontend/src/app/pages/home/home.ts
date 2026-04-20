@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -17,7 +18,7 @@ import { RouterLink } from '@angular/router';
             <p>Join the fastest growing marketplace in Almaty. Reliable service and quality products.</p>
             <div class="hero-btns">
               <a routerLink="/products" class="btn btn-primary">Start Shopping <i class="fas fa-arrow-right"></i></a>
-              <a routerLink="/register" class="btn btn-outline" *ngIf="true">Join as Seller</a>
+              <a routerLink="/register" class="btn btn-outline" *ngIf="!isLoggedIn()">Join as Seller</a>
             </div>
           </div>
           <div class="hero-image fade-in">
@@ -33,7 +34,7 @@ import { RouterLink } from '@angular/router';
           <i class="fas fa-boxes"></i>
           <h3>We are preparing something big!</h3>
           <p>Categories and products will be available shortly after our sellers finish setting up their shops.</p>
-          <a routerLink="/register" class="btn btn-secondary">Be the first seller <i class="fas fa-rocket"></i></a>
+          <a routerLink="/register" class="btn btn-secondary" *ngIf="!isLoggedIn()">Be the first seller <i class="fas fa-rocket"></i></a>
         </div>
       </section>
 
@@ -161,4 +162,10 @@ import { RouterLink } from '@angular/router';
     }
   `]
 })
-export class HomeComponent { }
+export class HomeComponent {
+  private authService = inject(AuthService);
+
+  isLoggedIn(): boolean {
+    return this.authService.isLoggedIn();
+  }
+}

@@ -59,7 +59,9 @@ class Product(models.Model):
     price = models.IntegerField(null=False, blank=False, verbose_name="Price")
     description = models.TextField(max_length=500, null=False, blank=False, verbose_name="Description")
     count = models.IntegerField(null=False, blank=False, verbose_name="Count")
+    image_url = models.URLField(max_length=500, null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products')
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, related_name='products_owned')
 
     def __str__(self):
         return self.name

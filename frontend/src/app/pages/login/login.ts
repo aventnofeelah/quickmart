@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink, Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -16,6 +17,10 @@ import { RouterLink, Router } from '@angular/router';
         </div>
         
         <form (ngSubmit)="onLogin()" #loginForm="ngForm">
+          <div class="alert alert-danger" *ngIf="errorMessage">
+            {{ errorMessage }}
+          </div>
+
           <div class="form-group">
             <label for="email">Email Address</label>
             <div class="input-wrapper">
@@ -47,9 +52,6 @@ import { RouterLink, Router } from '@angular/router';
                 #password="ngModel"
               >
             </div>
-             <div class="forgot-pass">
-                <a href="#">Forgot password?</a>
-             </div>
           </div>
 
           <button type="submit" class="btn btn-primary btn-block" [disabled]="loginForm.invalid">
@@ -142,14 +144,18 @@ import { RouterLink, Router } from '@angular/router';
       margin-top: 5px;
     }
 
-    .forgot-pass {
-      text-align: right;
-      margin-top: 8px;
+    .alert {
+      padding: 12px 15px;
+      border-radius: var(--radius);
+      margin-bottom: 20px;
+      font-size: 0.9rem;
+      font-weight: 500;
     }
 
-    .forgot-pass a {
-      font-size: 0.85rem;
-      color: var(--primary);
+    .alert-danger {
+      background: #fff5f5;
+      color: #e53e3e;
+      border: 1px solid #feb2b2;
     }
 
     .btn-block {
@@ -181,13 +187,42 @@ export class LoginComponent {
     email: '',
     password: ''
   };
+  errorMessage: string = '';
 
-  constructor(private router: Router) {}
+  private authService = inject(AuthService);
+  private router = inject(Router);
 
   onLogin() {
-    console.log('Login attempt:', this.loginData);
-    // Here we will call the Auth service
-    // For now, just redirect to home
-    this.router.navigate(['/']);
+    this.errorMessage = '';
+    
+    // We send the keys exactly as the backend expects them.
+    // Since USERNAME_FIELD = 'email', the backend usually expect { "email": "...", "password": "..." }
+    // or { "username": "...", "password": "..." }. 
+    // Given the previous code used 'email', let's stick to that but ensure it's sent.
+    
+    const credentials = {
+      email: this.loginData.email,
+      password: this.loginData.password
+    };
+
+    console.log('Attempting login with:', credentials);
+
+    this.authService.login(credentials).subscribe({
+      next: (res) => {
+        console.log('Login successful', res);
+        this.router.navigate(['/']);
+      },
+      error: (err) => {
+        console.error('Login error:', err);
+        if (err.status === 401) {
+          this.errorMessage = 'Invalid email or password. Please try again.';
+        } else if (err.status === 400) {
+          // If the backend returns 400, it might be due to missing/incorrect fields
+          this.errorMessage = 'Check your credentials and try again.';
+        } else {
+          this.errorMessage = 'An error occurred during login. Please try again later.';
+        }
+      }
+    });
   }
 }
