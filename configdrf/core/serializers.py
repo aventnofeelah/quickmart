@@ -6,7 +6,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'email', 'password')
+        fields = ('id', 'email', 'password', 'first_name', 'last_name')
 
     def validate_email(self, value):
         if User.objects.filter(email=value).exists():
@@ -14,6 +14,7 @@ class UserSerializer(serializers.ModelSerializer):
         return value
 
     def create(self, validated_data):
+        validated_data['username'] = validated_data['email']
         user = User.objects.create_user(**validated_data)
         return user
 
