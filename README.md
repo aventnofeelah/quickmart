@@ -1,28 +1,28 @@
 # 🛒 QuickMart | Full-Stack E-commerce Platform
 
-**QuickMart** — это современная платформа электронной коммерции, разработанная в рамках финального проекта по веб-разработке. Проект представляет собой полноценное Full-Stack приложение с использованием Django REST Framework для бэкенда и Angular для фронтенда.
+**QuickMart** is a modern e-commerce platform developed as a final project for Web Development. The project is a complete Full-Stack application using Django REST Framework for the backend and Angular for the frontend.
 
 ---
 
-## 👥 Команда проекта
+## 👥 Project Team
 *   **Rakhat** — Frontend Developer
 *   **Orazbay** — Backend Developer
 *   **Vadim** — Full-stack / UI Design
 
 ---
 
-## 🚀 Основные возможности
-- **Пользователи**: Система ролей (Покупатель / Продавец).
-- **Каталог товаров**: Просмотр товаров с фильтрацией по категориям и сортировкой по цене/названию.
-- **Магазин для продавцов**: Возможность продавцам публиковать свои товары и управлять ими.
-- **Корзина**: Функциональная корзина с сохранением товаров.
-- **Интеграция с картами**: Интерактивная карта для указания адреса магазина при регистрации.
-- **Безопасность**: Аутентификация на основе JWT-токенов.
-- **Адаптивный дизайн**: Полная поддержка мобильных устройств.
+## 🚀 Key Features
+- **User Roles**: Specialized systems for both Buyers and Sellers.
+- **Product Catalog**: Browse products with category filtering and sorting by price/name.
+- **Seller Dashboard**: Enable sellers to publish and manage their product listings.
+- **Shopping Cart**: Fully functional persistent cart system.
+- **Map Integration**: Interactive maps for shop locations using Leaflet.
+- **Security**: Secure authentication powered by JWT tokens.
+- **Responsive Design**: Fully optimized for mobile and desktop viewing.
 
 ---
 
-## 🛠 Технологии
+## 🛠 Technology Stack
 ### Backend
 - **Django 6.0+**
 - **Django REST Framework**
@@ -37,38 +37,38 @@
 
 ---
 
-## 🏁 Как запустить проект
+## 🏁 Getting Started
 
-### 1. Требования
-Убедитесь, что у вас установлены **Python 3.x** и **Node.js** (с npm).
+### 1. Prerequisites
+Ensure you have **Python 3.x** and **Node.js** (with npm) installed on your system.
 
-### 2. Установка бэкенда
+### 2. Backend Setup
 ```bash
 cd configdrf
 pip install -r requirements.txt
 python manage.py migrate
-python seed_data.py  # Заполнение базы начальными данными
+python seed_data.py  # Populate the database with initial data
 python manage.py runserver
 ```
-*Бэкенд будет доступен по адресу: `http://127.0.0.1:8000`*
+*The backend will be available at: `http://127.0.0.1:8000`*
 
-### 3. Установка фронтенда
+### 3. Frontend Setup
 ```bash
 cd frontend
 npm install
 npm start
 ```
-*Сайт будет доступен по адресу: `http://localhost:4200`*
+*The website will be available at: `http://localhost:4200`*
 
 ---
 
-## 🔐 Учетные данные админа (по умолчанию)
+## 🔐 Admin Credentials (Default)
 - **Email**: `admin@admin.com`
-- **Пароль**: `adminpassword`
-*(Можно изменить или создать нового через `python create_admin.py`)*
+- **Password**: `adminpassword`
+*(You can modify these or create a new one via `python create_admin.py`)*
 
 ---
 
-## 📖 Документация API
-После запуска бэкенда документация доступна по адресу:
+## 📖 API Documentation
+Once the backend is running, the interactive API documentation is available at:
 `http://127.0.0.1:8000/swagger/`
