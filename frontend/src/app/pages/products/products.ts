@@ -1,4 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef, inject } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+
 import { CommonModule } from '@angular/common';
 import { ApiService } from '../../services/api.service';
 import { CartService } from '../../services/cart.service';
@@ -12,7 +14,7 @@ import { CartService } from '../../services/cart.service';
       <div class="page-header">
         <h1>Product Catalog</h1>
         <div class="filters">
-           <select (change)="onCategoryChange($event)">
+           <select [value]="selectedCategoryId" (change)="onCategoryChange($event)">
              <option value="">All Categories</option>
              <option *ngFor="let cat of categories" [value]="cat.id">{{cat.name}}</option>
            </select>
@@ -27,7 +29,9 @@ import { CartService } from '../../services/cart.service';
       <div class="grid grid-cols-4" *ngIf="!loading; else loadingTemplate">
         <div class="product-card" *ngFor="let p of products">
           <div class="p-img">
-             <img [src]="p.image_url" *ngIf="p.image_url" alt="{{p.name}}" class="product-image">
+             <img [src]="p.image_url" *ngIf="p.image_url" 
+                  alt="{{p.name}}" class="product-image"
+                  (error)="p.image_url = 'https://placehold.co/400x400?text=Image+Not+Found'">
              <div class="no-img" *ngIf="!p.image_url"><i class="fas fa-image"></i></div>
           </div>
           <div class="p-info">
@@ -135,11 +139,16 @@ export class ProductsComponent implements OnInit {
   categories: any[] = [];
   loading = true;
 
-  constructor(private api: ApiService, private cart: CartService) {}
+  constructor(private api: ApiService, private cart: CartService, private route: ActivatedRoute) {}
   private cdr = inject(ChangeDetectorRef);
+  selectedCategoryId: string = '';
 
   ngOnInit() {
-    this.loadProducts();
+    this.route.queryParams.subscribe(params => {
+      this.selectedCategoryId = params['category'] || '';
+      this.loadProducts(this.selectedCategoryId ? { category: this.selectedCategoryId } : {});
+    });
+
     this.api.getCategories().subscribe({
       next: (res) => {
         this.categories = res && res.results ? res.results : (Array.isArray(res) ? res : []);

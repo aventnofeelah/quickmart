@@ -83,7 +83,13 @@ export class CategoriesComponent implements OnInit {
         this.categories = res && res.results ? res.results : (Array.isArray(res) ? res : []);
         
         // Add some icons if missing
-        const icons = ['fas fa-laptop', 'fas fa-tshirt', 'fas fa-home', 'fas fa-headphones', 'fas fa-pump-soap'];
+        const icons = [
+          'fas fa-laptop',         // Electronics
+          'fas fa-tshirt',         // Clothing
+          'fas fa-home',           // Home & Garden
+          'fas fa-shopping-basket', // Groceries (было fa-headphones)
+          'fas fa-robot'           // Toys (было fa-pump-soap)
+        ];
         this.categories.forEach((c, i) => {
           if (!c.icon) c.icon = icons[i % icons.length];
         });

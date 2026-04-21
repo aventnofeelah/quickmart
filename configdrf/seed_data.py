@@ -44,15 +44,15 @@ def seed():
         ('Organic Coffee', 4500, 'Premium arabica roasted coffee beans.', 100, 'Groceries', '/assets/products/coffee.png'),
         ('Artisanal Pasta', 1200, 'High-quality durum wheat pasta from Italy.', 150, 'Groceries', 'https://images.unsplash.com/photo-1473093226795-af9932fe5856?auto=format&fit=crop&q=80&w=400'),
         ('Fresh Fruit Basket', 6500, 'Assortment of fresh seasonal organic fruits.', 20, 'Groceries', 'https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&q=80&w=400'),
-        ('Natural Whole Milk', 900, 'Fresh farm milk in a glass bottle.', 80, 'Groceries', 'https://images.unsplash.com/photo-1563636619-e910f01859ec?auto=format&fit=crop&q=80&w=400'),
-        ('Dark Chocolate Bar', 2500, 'Handcrafted 70% cocoa artisan chocolate.', 60, 'Groceries', 'https://images.unsplash.com/photo-1511381939415-e4401546383a?auto=format&fit=crop&q=80&w=400'),
+        ('Natural Whole Milk', 900, 'Fresh farm milk in a glass bottle.', 80, 'Groceries', 'https://sc04.alicdn.com/kf/Ae878bb8bb7be4cdb9fc151b0ddae804ft/Creamy-Whole-Milk-Powder-For-Bulk-Export-With-Long-Shelf-Life-Milk-Powder-From-Reliable-Supplier.jpg'),
+        ('Dark Chocolate Bar', 2500, 'Handcrafted 70% cocoa artisan chocolate.', 60, 'Groceries', 'https://avatars.mds.yandex.net/i?id=e335efd7b8366ca77c1e1028e7242175ae74408b-5343537-images-thumbs&n=13'),
 
         # Toys
         ('Building blocks set', 15000, 'Creative construction set for children.', 25, 'Toys', 'https://images.unsplash.com/photo-1596443686812-2f45229eebc3?auto=format&fit=crop&q=80&w=400'),
         ('Classic Doll', 9000, 'Beautifully designed doll with accessories.', 15, 'Toys', 'https://images.unsplash.com/photo-1535572290543-960a8046f5af?auto=format&fit=crop&q=80&w=400'),
         ('Remote Control Car', 20000, 'High-speed RC car with rechargeable battery.', 10, 'Toys', 'https://images.unsplash.com/photo-1594787318286-3d835c1d207f?auto=format&fit=crop&q=80&w=400'),
-        ('Jigsaw Puzzle', 5500, '1000-piece puzzle with scenic image.', 30, 'Toys', 'https://images.unsplash.com/photo-1585314062340-f1a5a7c9328d?auto=format&fit=crop&q=80&w=400'),
-        ('Teddy Bear Plush', 7000, 'Soft and huggable premium plush toy.', 40, 'Toys', 'https://images.unsplash.com/photo-1556103330-d5ecf4770d3e?auto=format&fit=crop&q=80&w=400'),
+        ('Jigsaw Puzzle', 5500, '1000-piece puzzle with scenic image.', 30, 'Toys', 'https://images.unsplash.com/photo-1516110833967-0b5716ca1387?auto=format&fit=crop&q=80&w=400'),
+        ('Teddy Bear Plush', 7000, 'Soft and huggable premium plush toy.', 40, 'Toys', 'https://img.joomcdn.net/a149ed716053942887094bf8b99ccbdfb2098a2f_1024_1024.jpeg'),
     ]
 
     for name, price, desc, count, cat_name, img in products_data:

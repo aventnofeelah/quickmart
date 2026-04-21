@@ -15,7 +15,10 @@ import { Router } from '@angular/router';
       <div *ngIf="items.length > 0; else emptyCart" class="cart-container">
         <div class="cart-items">
           <div *ngFor="let item of items" class="cart-item">
-            <img [src]="item.image_url || 'assets/images/placeholder.png'" alt="{{item.name}}">
+            <img [src]="item.image_url || 'assets/images/placeholder.png'" 
+                 alt="{{item.name}}"
+                 (error)="item.image_url = 'https://placehold.co/400x400?text=Image+Not+Found'">
+
             <div class="item-details">
               <h3>{{item.name}}</h3>
               <p class="price">{{item.price | number}} KZT</p>
