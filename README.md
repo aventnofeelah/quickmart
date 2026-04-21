@@ -1,6 +1,74 @@
-# QuickMart | Web Development Final Project
-Type: Online store\n
-Members:
-* Rakhat
-* Orazbay
-* Vadim
+# 🛒 QuickMart | Full-Stack E-commerce Platform
+
+**QuickMart** — это современная платформа электронной коммерции, разработанная в рамках финального проекта по веб-разработке. Проект представляет собой полноценное Full-Stack приложение с использованием Django REST Framework для бэкенда и Angular для фронтенда.
+
+---
+
+## 👥 Команда проекта
+*   **Rakhat** — Frontend Developer
+*   **Orazbay** — Backend Developer
+*   **Vadim** — Full-stack / UI Design
+
+---
+
+## 🚀 Основные возможности
+- **Пользователи**: Система ролей (Покупатель / Продавец).
+- **Каталог товаров**: Просмотр товаров с фильтрацией по категориям и сортировкой по цене/названию.
+- **Магазин для продавцов**: Возможность продавцам публиковать свои товары и управлять ими.
+- **Корзина**: Функциональная корзина с сохранением товаров.
+- **Интеграция с картами**: Интерактивная карта для указания адреса магазина при регистрации.
+- **Безопасность**: Аутентификация на основе JWT-токенов.
+- **Адаптивный дизайн**: Полная поддержка мобильных устройств.
+
+---
+
+## 🛠 Технологии
+### Backend
+- **Django 6.0+**
+- **Django REST Framework**
+- **SimpleJWT** (Authentication)
+- **SQLite** (Database)
+
+### Frontend
+- **Angular 17+** (Standalone components)
+- **TypeScript**
+- **Leaflet** (Maps API)
+- **FontAwesome** (Icons)
+
+---
+
+## 🏁 Как запустить проект
+
+### 1. Требования
+Убедитесь, что у вас установлены **Python 3.x** и **Node.js** (с npm).
+
+### 2. Установка бэкенда
+```bash
+cd configdrf
+pip install -r requirements.txt
+python manage.py migrate
+python seed_data.py  # Заполнение базы начальными данными
+python manage.py runserver
+```
+*Бэкенд будет доступен по адресу: `http://127.0.0.1:8000`*
+
+### 3. Установка фронтенда
+```bash
+cd frontend
+npm install
+npm start
+```
+*Сайт будет доступен по адресу: `http://localhost:4200`*
+
+---
+
+## 🔐 Учетные данные админа (по умолчанию)
+- **Email**: `admin@admin.com`
+- **Пароль**: `adminpassword`
+*(Можно изменить или создать нового через `python create_admin.py`)*
+
+---
+
+## 📖 Документация API
+После запуска бэкенда документация доступна по адресу:
+`http://127.0.0.1:8000/swagger/`
